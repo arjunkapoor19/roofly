@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { Property } from '../types/property';
 
@@ -10,6 +10,12 @@ interface PropertyCardProps {
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ property, showVR = false }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const formatPrice = (price: number): string => {
     if (price >= 10000000) {
       return `₹${(price / 10000000).toFixed(1)}Cr`;
@@ -39,11 +45,25 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, showVR = false })
     console.log('Toggle favorite for property:', property.id);
   };
 
+  // Don't render until client-side hydration is complete
+  if (!isClient) {
+    return (
+      <div className="bg-white rounded-xl overflow-hidden shadow-sm">
+        <div className="w-full h-48 bg-gray-200 animate-pulse"></div>
+        <div className="p-6">
+          <div className="h-8 bg-gray-200 rounded mb-2 animate-pulse"></div>
+          <div className="h-4 bg-gray-200 rounded mb-4 animate-pulse"></div>
+          <div className="h-12 bg-gray-200 rounded animate-pulse"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative">
         <img 
-          src={property.image} 
+          src="https://blocks.astratic.com/img/general-img-landscape.png"
           alt={property.title || `Property in ${property.location}`}
           className="w-full h-48 object-cover"
         />
@@ -60,12 +80,17 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, showVR = false })
         <button 
           onClick={handleToggleFavorite}
           className="absolute top-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-50 transition-colors"
+          suppressHydrationWarning
         >
           <Heart size={16} className="text-gray-600" />
         </button>
       </div>
       <div className="p-6">
-        <div className="text-2xl font-bold text-gray-900 mb-2">
+        {/* This div is the one causing hydration issues - add suppressHydrationWarning */}
+        <div 
+          className="text-2xl font-bold text-gray-900 mb-2"
+          suppressHydrationWarning
+        >
           {formatPrice(property.price)}
         </div>
         <div className="text-gray-600 mb-4">

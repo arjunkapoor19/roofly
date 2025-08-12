@@ -72,7 +72,7 @@ const HeroSection: React.FC = () => {
           {/* Left side - Content */}
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 sm:mb-8 mt-8 sm:mt-12 leading-tight text-gray-900 font-serif text-center sm:text-left">
+            <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 sm:mb-8 mt-8 sm:mt-12 leading-tight text-gray-900 font-serif text-center sm:text-left">
               Your new home
               <br />
               <span className="text-gray-700">Journey awaits</span>

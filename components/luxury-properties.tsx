@@ -12,21 +12,21 @@ const LuxuryPropertiesSection: React.FC = () => {
       price: 45000000,
       location: "Bangalore, Inn",
       status: "Available",
-      image: "/api/placeholder/400/300"
+      image: "https://blocks.astratic.com/img/general-img-landscape.png"
     },
     {
       id: 2,
       price: 37000000,
       location: "Bangalore, Inn",
       status: "Available",
-      image: "/api/placeholder/400/300"
+      image: "https://blocks.astratic.com/img/general-img-landscape.png"
     },
     {
       id: 3,
       price: 52000000,
       location: "Bangalore, Inn",
       status: "Sold",
-      image: "/api/placeholder/400/300"
+      image: "/https://blocks.astratic.com/img/general-img-landscape.png"
     },
     {
       id: 4,
