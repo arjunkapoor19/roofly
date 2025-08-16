@@ -10,20 +10,55 @@ const HeroSection: React.FC = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [isVisible, setIsVisible] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState({ name: 'India', flag: '🇮🇳', code: 'IN' });
   const heroRef = useRef<HTMLElement>(null);
-
-  const propertyTypes: PropertyType[] = ['Buy', 'Rent', 'New Launch', 'PG / Co-living', 'Commercial', 'Plots/Land', 'Projects'];
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const countries = [
+    { name: 'India', flag: '🇮🇳', code: 'IN' },
+    { name: 'United States', flag: '🇺🇸', code: 'US' },
+    { name: 'United Kingdom', flag: '🇬🇧', code: 'UK' },
+    { name: 'Canada', flag: '🇨🇦', code: 'CA' },
+    { name: 'Australia', flag: '🇦🇺', code: 'AU' },
+    { name: 'Singapore', flag: '🇸🇬', code: 'SG' },
+    { name: 'UAE', flag: '🇦🇪', code: 'AE' },
+  ];
+
   const handleSearch = () => {
     // Search logic here
+    console.log('Searching for:', searchValue, 'in', selectedCountry.name);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
+  };
+
+  const handleCountrySelect = (country: typeof countries[0]) => {
+    setSelectedCountry(country);
+    setDropdownOpen(false);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   const popularCities = [
@@ -82,122 +117,54 @@ const HeroSection: React.FC = () => {
               Anyone redefines buying and selling homes with ease, efficiency, and full transparency.
             </p>
 
-            {/* Main Search Bar - Mobile Optimized */}
-            <div className="w-full max-w-4xl mx-auto mb-8 sm:mb-12">
-              <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-                
-                {/* Mobile: Stacked Layout */}
-                <div className="block sm:hidden">
-                  {/* Country Selector - Mobile */}
-                  <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200">
-                    <div className="flex items-center">
-                      <span className="text-xl mr-2">🇮🇳</span>
-                      <span className="text-sm font-medium text-gray-700">India</span>
-                    </div>
-                    <ChevronDown className="w-4 h-4 text-gray-400" />
-                  </div>
-                  
-                  {/* Search Input - Mobile */}
-                  <div className="p-4">
-                    <input
-                      type="text"
-                      value={searchValue}
-                      onChange={handleInputChange}
-                      onKeyPress={handleKeyPress}
-                      placeholder="Enter address, city or zip code"
-                      className="w-full px-4 py-3 text-base text-gray-700 placeholder-gray-400 focus:outline-none bg-white border border-gray-200 rounded-lg focus:border-yellow-400 transition-colors"
-                      onFocus={() => setSearchFocused(true)}
-                      onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
-                    />
-                    
-                    {/* Search Button - Mobile */}
-                    <button 
-                      onClick={handleSearch}
-                      className="w-full mt-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-yellow-200 flex items-center justify-center text-base"
-                    >
-                      <Search size={20} className="mr-2" />
-                      Discover homes
-                    </button>
-                  </div>
-                </div>
+    <div className="w-full max-w-4xl mx-auto">
+  <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-200">
+    {/* Top Search Row */}
+    <div className="flex items-center bg-white">
+      {/* Country Selector */}
+      <div className="flex items-center px-4 border-r border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors">
+        <span className="text-2xl mr-2">🇺🇸</span>
+        <svg
+          className="w-4 h-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
 
-                {/* Desktop: Horizontal Layout */}
-                <div className="hidden sm:flex items-center">
-                  {/* Country Selector - Desktop */}
-                  <div className="flex items-center px-4 lg:px-6 py-3 lg:py-4 border-r border-gray-200 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
-                    <span className="text-xl lg:text-2xl mr-2 lg:mr-3">🇮🇳</span>
-                    <ChevronDown className="w-4 h-4 text-gray-400" />
-                  </div>
-                  
-                  {/* Search Input - Desktop */}
-                  <input
-                    type="text"
-                    value={searchValue}
-                    onChange={handleInputChange}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Enter an address, city or a zip code"
-                    className="flex-1 px-4 lg:px-6 py-3 lg:py-4 text-base lg:text-lg text-gray-700 placeholder-gray-400 focus:outline-none bg-white"
-                    onFocus={() => setSearchFocused(true)}
-                    onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
-                  />
-                  
-                  {/* Search Button - Desktop */}
-                  <button 
-                    onClick={handleSearch}
-                    className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 lg:px-8 py-3 lg:py-4 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-200 flex items-center text-base lg:text-lg"
-                  >
-                    <Search size={20} className="mr-2 lg:mr-3" />
-                    <span className="hidden md:inline">Discover homes</span>
-                    <span className="md:hidden">Search</span>
-                  </button>
-                </div>
+      {/* Search Input */}
+      <input
+        type="text"
+        placeholder="Enter an address, city or a zip code"
+        className="flex-1 px-4 py-4 text-gray-700 placeholder-gray-400 focus:outline-none"
+      />
 
-                {/* Stats Bar - Mobile Optimized */}
-                <div className="bg-gray-900 text-white px-4 sm:px-8 py-3 sm:py-4">
-                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
-                    <div className="flex items-center w-full sm:w-auto justify-between sm:justify-start">
-                      <div className="flex items-center">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
-                        <span className="font-semibold text-xs sm:text-sm">31M+ homes</span>
-                      </div>
-                      <div className="flex items-center sm:hidden">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
-                        <span className="font-semibold text-xs">4.6M+ agents</span>
-                      </div>
-                    </div>
-                    <div className="hidden sm:flex items-center">
-                      <div className="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
-                      <span className="font-semibold text-sm">4.6M+ agents</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
-                      <span className="font-semibold text-xs sm:text-sm">Globally available</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      {/* Search Button */}
+      <button className="flex items-center px-6 py-4 bg-yellow-400 hover:bg-yellow-500 font-medium text-gray-900 transition-colors">
+        <svg
+          className="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
+        </svg>
+        Discover homes
+      </button>
+    </div>
 
-              {/* Search Suggestions - Mobile Optimized */}
-              {searchFocused && searchValue && (
-                <div className="bg-white rounded-b-xl sm:rounded-b-2xl shadow-lg border-l border-r border-b border-gray-200 mt-1 w-full">
-                  <div className="p-3 sm:p-4">
-                    <div className="text-xs sm:text-sm text-gray-600 mb-2">Popular searches</div>
-                    <div className="space-y-1 sm:space-y-2">
-                      {['Mumbai, MH', 'Bangalore, KA', 'Delhi NCR', 'Pune, MH'].map((suggestion, index) => (
-                        <div 
-                          key={index}
-                          className="flex items-center p-2 sm:p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
-                          onClick={() => setSearchValue(suggestion)}
-                        >
-                          <Search size={14} className="text-gray-400 mr-2 sm:mr-3 flex-shrink-0" />
-                          <span className="text-sm sm:text-base text-gray-700">{suggestion}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+    {/* Stats Bar */}
+    <div className="bg-gray-900 text-white flex justify-center gap-8 px-4 py-3 text-sm">
+      <span>31M+ homes</span>
+      <span>4.6M+ agents</span>
+      <span>Globally available</span>
+    </div>
+  </div>
+</div>
 
             {/* Popular Cities - Mobile Optimized */}
             <div className="mb-8 sm:mb-12">

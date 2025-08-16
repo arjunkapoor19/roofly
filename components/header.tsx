@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Search, Heart } from 'lucide-react';
+import { Search, Star } from 'lucide-react';
 
 const Header: React.FC = () => {
   return (
@@ -35,13 +35,6 @@ const Header: React.FC = () => {
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
-            {/* Country flag */}
-            <div className="flex items-center">
-              <span className="text-lg mr-1">🇺🇸</span>
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
             
             {/* Search bar */}
             <div className="hidden lg:flex items-center bg-gray-50 rounded-full px-4 py-2 min-w-[300px]">
@@ -57,12 +50,7 @@ const Header: React.FC = () => {
 
             {/* Heart icon */}
             <button className="text-gray-700 hover:text-gray-900">
-              <Heart size={20} />
-            </button>
-
-            {/* Find an agent button */}
-            <button className="border border-purple-600 text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-purple-50">
-              Find an agent
+              <Star size={20} />
             </button>
 
             {/* Account button */}
